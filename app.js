@@ -1,64 +1,47 @@
-const STORAGE_KEY = "sticky-notes";
-const notesContainer = document.querySelector("#notes");
-const form = document.querySelector("#note-form");
-const input = document.querySelector("#note-input");
+// Get the parts of the page that JavaScript needs to work with.
+const noteText = document.getElementById("noteText");
+const addButton = document.getElementById("addButton");
+const notes = document.getElementById("notes");
 
-function readNotes() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    return Array.isArray(saved) ? saved.filter((note) => typeof note === "string") : [];
-  } catch {
-    return [];
-  }
-}
+// This number decides which background color the next note will use.
+let noteCount = 0;
 
-let notes = readNotes();
+function addNote() {
+    const text = noteText.value.trim();
 
-function saveNotes() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
-  } catch {
-    // The notes remain usable for this visit if browser storage is unavailable.
-  }
-}
+    // Do not add a note if the text box is empty.
+    if (text === "") {
+        return;
+    }
 
-function renderNotes() {
-  notesContainer.replaceChildren();
+    // Make a new note and put the typed text inside it.
+    const note = document.createElement("div");
+    note.classList.add("note");
+    note.textContent = text;
 
-  notes.forEach((text, index) => {
-    const note = document.createElement("article");
-    note.className = "note";
-    note.append(document.createTextNode(text));
+    // Alternate between the blue and white note colors.
+    if (noteCount % 2 === 0) {
+        note.classList.add("note-blue");
+    } else {
+        note.classList.add("note-white");
+    }
+    noteCount = noteCount + 1;
 
-    const removeButton = document.createElement("button");
-    removeButton.className = "delete-button";
-    removeButton.type = "button";
-    removeButton.textContent = "×";
-    removeButton.setAttribute("aria-label", `Delete note ${index + 1}`);
-    removeButton.addEventListener("click", () => {
-      notes.splice(index, 1);
-      saveNotes();
-      renderNotes();
+    // Make the X button that removes this note.
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "X";
+    deleteButton.classList.add("delete-button");
+    deleteButton.setAttribute("aria-label", "Delete note");
+    deleteButton.addEventListener("click", function () {
+        note.remove();
     });
 
-    note.append(removeButton);
-    notesContainer.append(note);
-  });
+    note.appendChild(deleteButton);
+    notes.appendChild(note);
+
+    // Clear the text box so another note can be typed.
+    noteText.value = "";
 }
 
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const text = input.value.trim();
-  if (!text) {
-    input.focus();
-    return;
-  }
-
-  notes.push(text);
-  saveNotes();
-  renderNotes();
-  form.reset();
-  input.focus();
-});
-
-renderNotes();
+// Run addNote when the plus button is clicked.
+addButton.addEventListener("click", addNote);

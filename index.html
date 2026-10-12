@@ -1,25 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f1f1f1">
-  <title>Sticky Notes</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <script src="app.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticky Notes</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="notes-panel" aria-labelledby="page-title">
-    <h1 id="page-title">Sticky Notes</h1>
-    <section class="notes-grid" id="notes" aria-label="Your notes" aria-live="polite"></section>
-    <form class="composer" id="note-form">
-      <label class="visually-hidden" for="note-input">Write a new note</label>
-      <textarea id="note-input" placeholder="Type a new note..." rows="4" maxlength="500" required></textarea>
-      <button class="add-button" type="submit" aria-label="Add note" title="Add note">+</button>
-    </form>
-  </main>
+    <main class="board">
+        <div class="top-bar"></div>
+
+        <section class="content">
+            <h1>Sticky Notes</h1>
+
+            <div id="notes" class="notes">
+                <!-- New notes will be added here by JavaScript. -->
+            </div>
+
+            <div class="new-note">
+                <textarea id="noteText" placeholder="Type a new note..."></textarea>
+                <button id="addButton" aria-label="Add note">+</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
